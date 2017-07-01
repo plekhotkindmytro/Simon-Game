@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, srink-to-fit=no">
+
+
+    <link rel="stylesheet" href="bootstrap-4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <section id="game">
+            <h1>Simon<sup>®</sup></h1>
+
+            <div class="controls">
+                <div class="form-check">
+                    <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox">
+                    On/Off
+                </label>
+                </div>
+                <button id="start" class="btn btn-danger">Start</button>
+                <div class="form-check">
+                    <label class="form-check-label">
+                    <input id="strict" class="form-check-input" type="checkbox"> Strict
+                </label>
+                </div>
+
+            </div>
+            <div class="play-tiles-wrapper">
+                <div class="play-tile green-tile"></div>
+                <div class="play-tile red-tile"></div>
+                <div class="play-tile yellow-tile"></div>
+                <div class="play-tile blue-tile"></div>
+            </div>
+            <div class="output-wrapper">
+                <div class="output">...</div>
+            </div>
+        </section>
+    </div>
+
+    <script src="jquery-3.2.1.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src="tether.min.js"></script>
+    <script src="bootstrap-4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.disabled-element {
+    pointer-events: none;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls {
+    border: #222 dashed 1px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.play-tiles-wrapper {
+    border: #222 dashed 1px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.play-tile {
+    width: 50px;
+    height: 70px;
+    border: #222 solid 1px;
+    cursor: pointer;
+}
+
+.blue-tile {
+    background-color: #0000FF;
+}
+
+.light-blue-tile {
+    background-color: #7373FF;
+}
+
+.green-tile {
+    background-color: #378445;
+}
+
+.light-green-tile {
+    background-color: #91BB99;
+}
+
+.red-tile {
+    background-color: #FF0000;
+}
+
+.light-red-tile {
+    background-color: #FF7373;
+}
+
+.yellow-tile {
+    background-color: #FFFF00;
+}
+
+.light-yellow-tile {
+    background-color: #FFFF5C;
+}
+
+.output-wrapper {
+    border: #222 dashed 1px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
