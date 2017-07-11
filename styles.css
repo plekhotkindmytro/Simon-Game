@@ -18,27 +18,55 @@ body {
 }
 
 .controls {
-    border: #222 dashed 1px;
+    border: #333 solid 0.75rem;
     padding: 0.5rem;
-    margin-bottom: 1rem;
+    width: 300px;
+    height: 300px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    background-color: #fff;
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .play-tiles-wrapper {
-    border: #222 dashed 1px;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
     display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 500px;
+    height: 500px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    box-shadow: 0 0 0.5em #777;
+}
+
+.play-tile-row {
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
 
 .play-tile {
-    width: 50px;
-    height: 70px;
-    border: #222 solid 1px;
+    width: 100%;
+    height: 100%;
+    border: #333 solid 0.75rem;
     cursor: pointer;
 }
 
 .blue-tile {
     background-color: #0000FF;
+    -moz-border-bottom-right-radius: 100%;
+    -webkit-border-bottom-right-radius: 100%;
+    border-bottom-right-radius: 100%;
+    border-right-width: 1.5rem;
+    border-bottom-width: 1.5rem;
 }
 
 .light-blue-tile {
@@ -47,6 +75,11 @@ body {
 
 .green-tile {
     background-color: #378445;
+    -moz-border-top-left-radius: 100%;
+    -webkit-border-top-left-radius: 100%;
+    border-top-left-radius: 100%;
+    border-left-width: 1.5rem;
+    border-top-width: 1.5rem;
 }
 
 .light-green-tile {
@@ -55,6 +88,11 @@ body {
 
 .red-tile {
     background-color: #FF0000;
+    -moz-border-top-right-radius: 100%;
+    -webkit-border-top-right-radius: 100%;
+    border-top-right-radius: 100%;
+    border-right-width: 1.5rem;
+    border-top-width: 1.5rem;
 }
 
 .light-red-tile {
@@ -63,6 +101,11 @@ body {
 
 .yellow-tile {
     background-color: #FFFF00;
+    -moz-border-bottom-left-radius: 100%;
+    -webkit-border-bottom-left-radius: 100%;
+    border-bottom-left-radius: 100%;
+    border-left-width: 1.5rem;
+    border-bottom-width: 1.5rem;
 }
 
 .light-yellow-tile {
@@ -72,5 +115,5 @@ body {
 .output-wrapper {
     border: #222 dashed 1px;
     padding: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }

@@ -13,10 +13,17 @@
 
 <body>
     <div class="wrapper">
-        <section id="game">
-            <h1>Simon<sup>®</sup></h1>
-
+        <div class="play-tiles-wrapper">
+            <div class="play-tile-row">
+                <div class="play-tile green-tile"></div>
+                <div class="play-tile red-tile"></div>
+            </div>
+            <div class="play-tile-row">
+                <div class="play-tile yellow-tile"></div>
+                <div class="play-tile blue-tile"></div>
+            </div>
             <div class="controls">
+                <h1>Simon<sup>®</sup></h1>
                 <div class="form-check">
                     <label class="form-check-label">
                     <input class="form-check-input" type="checkbox">
@@ -29,18 +36,11 @@
                     <input id="strict" class="form-check-input" type="checkbox"> Strict
                 </label>
                 </div>
-
+                <div class="output-wrapper">
+                    <div class="output">...</div>
+                </div>
             </div>
-            <div class="play-tiles-wrapper">
-                <div class="play-tile green-tile"></div>
-                <div class="play-tile red-tile"></div>
-                <div class="play-tile yellow-tile"></div>
-                <div class="play-tile blue-tile"></div>
-            </div>
-            <div class="output-wrapper">
-                <div class="output">...</div>
-            </div>
-        </section>
+        </div>
     </div>
 
     <script src="jquery-3.2.1.min.js"></script>
