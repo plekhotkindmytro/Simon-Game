@@ -1,7 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Alfa+Slab+One');
 html,
 body {
     width: 100%;
     height: 100%;
+}
+
+body {
+    font-family: 'BenchNine', sans-serif;
+    font-size: 1rem;
+}
+
+.simon-title {
+    font-family: 'Alfa Slab One', cursive;
+    font-size: 3rem;
+}
+
+.simon-title-sup {
+    font-size: 1rem;
+    top: -1.2em;
 }
 
 .disabled-element {

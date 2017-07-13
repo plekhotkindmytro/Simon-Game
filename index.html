@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="bootstrap-4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="switch.css">
 </head>
 
 <body>
@@ -23,13 +24,13 @@
                 <div class="play-tile blue-tile"></div>
             </div>
             <div class="controls">
-                <h1>Simon<sup>®</sup></h1>
-                <div class="form-check">
-                    <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox">
-                    On/Off
-                </label>
-                </div>
+                <h1 class="simon-title">Simon<sup class="simon-title-sup">®</sup></h1>
+                <div class="switch-wrapper">OFF
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>ON</div>
+
                 <button id="start" class="btn btn-danger">Start</button>
                 <div class="form-check">
                     <label class="form-check-label">
