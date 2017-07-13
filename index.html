@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="switch.css">
+    <link rel="stylesheet" href="strict.css">
 </head>
 
 <body>
@@ -25,11 +26,32 @@
             </div>
             <div class="controls">
                 <h1 class="simon-title">Simon<sup class="simon-title-sup">®</sup></h1>
-                <div class="switch-wrapper">OFF
-                    <label class="switch">
+
+                <div class="strict-wrapper">
+                    Strict
+                    <label class="strict">
                         <input type="checkbox">
+                        <span class="strict-button"></span>
+                        <span class="indicator"></span>
+                    </label>
+                </div>
+                
+             <!--<div class="strict-wrapper">
+    Start
+    <label class="strict">
+                        <input type="checkbox">
+                        <span class="strict-button"></span>
+                        <span class="indicator"></span>
+                    </label>
+</div>-->
+                
+                <div class="switch-wrapper">
+                    OFF
+                    <label class="switch">
+                        <input id="on-off" type="checkbox">
                         <span class="slider"></span>
-                    </label>ON</div>
+                    </label>ON
+                </div>
 
                 <button id="start" class="btn btn-danger">Start</button>
                 <div class="form-check">

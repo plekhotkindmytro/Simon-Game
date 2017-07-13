@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css?family=BenchNine');
+
+.strict-wrapper {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    line-height: 22px;
+    padding: 5px;
+}
+
+.strict {
+    position: relative;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+}
+
+.strict input {
+    display: none;
+}
+
+.strict-button {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: #333 solid 4px;
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    background-color: yellow;
+    -webkit-box-shadow: 0 2px 5px #333;
+    -moz-box-shadow: 0 2px 5px #333;
+    box-shadow: 0 2px 5px #333;
+}
+
+.indicator {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    top: -15px;
+    left: 8px;
+    border: #333 solid 2px;
+    background-color: #333;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.strict-button:active {
+    top: 1px;
+    bottom: -1px;
+    -webkit-box-shadow: 0 1px 1px #333;
+    -moz-box-shadow: 0 1px 1px #333;
+    box-shadow: 0 1px 1px #333;
+}
+
+input:checked + .indicator {}
+
+input:checked + .indicator:before {
+    background-color: red;
+}
