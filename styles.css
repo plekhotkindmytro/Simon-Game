@@ -34,7 +34,7 @@ body {
     align-items: center;
 }
 
-.controls {
+.controls-wrapper {
     border: #333 solid 0.75rem;
     padding: 0.5rem;
     width: 250px;

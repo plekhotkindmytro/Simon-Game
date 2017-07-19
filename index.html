@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="switch.css">
     <link rel="stylesheet" href="strict.css">
+    <link rel="stylesheet" href="start.css">
 </head>
 
 <body>
@@ -24,7 +25,7 @@
                 <div class="play-tile yellow-tile"></div>
                 <div class="play-tile blue-tile"></div>
             </div>
-            <div class="controls">
+            <div class="controls-wrapper">
                 <h1 class="simon-title">Simon<sup class="simon-title-sup">®</sup></h1>
 
                 <div class="strict-wrapper">
@@ -35,16 +36,7 @@
                         <span class="indicator"></span>
                     </label>
                 </div>
-                
-             <!--<div class="strict-wrapper">
-    Start
-    <label class="strict">
-                        <input type="checkbox">
-                        <span class="strict-button"></span>
-                        <span class="indicator"></span>
-                    </label>
-</div>-->
-                
+
                 <div class="switch-wrapper">
                     OFF
                     <label class="switch">
@@ -53,12 +45,11 @@
                     </label>ON
                 </div>
 
-                <button id="start" class="btn btn-danger">Start</button>
-                <div class="form-check">
-                    <label class="form-check-label">
-                    <input id="strict" class="form-check-input" type="checkbox"> Strict
-                </label>
+                <div class="start-wrapper">
+                    <div id="start" class="start"></div>
+                    <div>Start</div>
                 </div>
+
                 <div class="output-wrapper">
                     <div class="output">...</div>
                 </div>
