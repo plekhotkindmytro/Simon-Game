@@ -52,8 +52,9 @@ var gameState = {
 
 };
 
+var controls;
 $(document).ready(function () {
-
+    controls = new Controls();
 
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
