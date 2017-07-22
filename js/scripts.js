@@ -1,3 +1,27 @@
+var CONTROLS = {
+    tiles: {
+        green: null,
+        red: null,
+        yellow: null,
+        blue: null
+    },
+    onOff: null,
+    count: null,
+    start: null,
+    strict: null,
+    init: function () {
+        this.tiles.blue = $("#blue-tile");
+        this.tiles.green = $("#green-tile");
+        this.tiles.red = $("#red-tile");
+        this.tiles.yellow = $("#yellow-tile");
+
+        this.btnOnOff = $("#on-off");
+        this.count = $("#output");
+        this.start = $("#start");
+        this.strict = $("#strict");
+    }
+};
+
 var Game = function () {
 
     var simonArray = [];
@@ -22,13 +46,16 @@ var Game = function () {
     this.isStrict = function () {
         return strict;
     };
-}
+};
 
 var gameState = {
 
 };
 
 $(document).ready(function () {
+
+
+
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
     var context = new AudioContext(),

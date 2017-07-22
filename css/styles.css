@@ -9,7 +9,7 @@ body {
     font-family: 'BenchNine', sans-serif;
     font-size: 1rem;
     color: #222;
-    background-image: url('img/retina_wood/retina_wood.png');
+    background-image: url('../img/retina_wood/retina_wood.png');
 }
 
 td {
@@ -46,62 +46,20 @@ td {
     cursor: pointer;
 }
 
-.blue-tile {
-    background-color: #094A8F;
-    -moz-border-bottom-right-radius: 100%;
-    -webkit-border-bottom-right-radius: 100%;
-    border-bottom-right-radius: 100%;
-    border-right-width: 1.5rem;
-    border-bottom-width: 1.5rem;
-}
-
 .light-blue-tile {
     background-color: #7373FF;
-}
-
-.green-tile {
-    background-color: #00A74A;
-    -moz-border-top-left-radius: 100%;
-    -webkit-border-top-left-radius: 100%;
-    border-top-left-radius: 100%;
-    border-left-width: 1.5rem;
-    border-top-width: 1.5rem;
 }
 
 .light-green-tile {
     background-color: #91BB99;
 }
 
-.red-tile {
-    background-color: #9F0F17;
-    -moz-border-top-right-radius: 100%;
-    -webkit-border-top-right-radius: 100%;
-    border-top-right-radius: 100%;
-    border-right-width: 1.5rem;
-    border-top-width: 1.5rem;
-}
-
 .light-red-tile {
     background-color: #FF7373;
 }
 
-.yellow-tile {
-    background-color: #CCA707;
-    -moz-border-bottom-left-radius: 100%;
-    -webkit-border-bottom-left-radius: 100%;
-    border-bottom-left-radius: 100%;
-    border-left-width: 1.5rem;
-    border-bottom-width: 1.5rem;
-}
-
 .light-yellow-tile {
     background-color: #FFFF5C;
-}
-
-.output-wrapper {
-    border: #222 dashed 1px;
-    padding: 0.5rem;
-    margin-bottom: 1.5rem;
 }
 
 #simon {
@@ -137,7 +95,7 @@ td {
     margin-bottom: 0.5rem;
 }
 
-#buttons > td {
+#buttons>td {
     margin-bottom: 0.35rem;
 }
 
@@ -145,7 +103,6 @@ td {
     margin: 0 auto;
     text-align: center;
     background-color: #32050C;
-    color: #3C060E;
     height: 40px;
     width: 55px;
     border: #222 solid 2px;
@@ -153,4 +110,48 @@ td {
     line-height: 2.3rem;
     font-size: 2rem;
     font-family: 'VT323', monospace;
+}
+
+.output-enabled {
+    color: #DC0D29;
+}
+
+.output-disabled {
+    color: #3C060E;
+}
+
+#blue-tile {
+    background-color: #094A8F;
+    -moz-border-bottom-right-radius: 100%;
+    -webkit-border-bottom-right-radius: 100%;
+    border-bottom-right-radius: 100%;
+    border-right-width: 1.5rem;
+    border-bottom-width: 1.5rem;
+}
+
+#green-tile {
+    background-color: #00A74A;
+    -moz-border-top-left-radius: 100%;
+    -webkit-border-top-left-radius: 100%;
+    border-top-left-radius: 100%;
+    border-left-width: 1.5rem;
+    border-top-width: 1.5rem;
+}
+
+#red-tile {
+    background-color: #9F0F17;
+    -moz-border-top-right-radius: 100%;
+    -webkit-border-top-right-radius: 100%;
+    border-top-right-radius: 100%;
+    border-right-width: 1.5rem;
+    border-top-width: 1.5rem;
+}
+
+#yellow-tile {
+    background-color: #CCA707;
+    -moz-border-bottom-left-radius: 100%;
+    -webkit-border-bottom-left-radius: 100%;
+    border-bottom-left-radius: 100%;
+    border-left-width: 1.5rem;
+    border-bottom-width: 1.5rem;
 }
