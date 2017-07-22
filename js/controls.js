@@ -50,33 +50,74 @@ var Controls = function () {
         }
     });
 
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    var context = new AudioContext();
+
+
+    var blueOscillator = context.createOscillator();
+    blueOscillator.type = 'square';
+    blueOscillator.frequency.value = 500;
+
+    var greenOscillator = context.createOscillator();
+    greenOscillator.type = 'square';
+    greenOscillator.frequency.value = 600;
+
 
     function enableAllControls() {
-        that.tiles.blue.removeClass("disabled-element");
-        that.tiles.green.removeClass("disabled-element");
-        that.tiles.red.removeClass("disabled-element");
-        that.tiles.yellow.removeClass("disabled-element");
-        that.start.removeClass("disabled-element");
-        that.strict.removeClass("disabled-element");
+        that.tiles.blue
+            .add(that.tiles.green)
+            .add(that.tiles.red)
+            .add(that.tiles.yellow)
+            .add(that.start)
+            .add(that.strict)
+            .removeClass("disabled-element");
+
+        blueOscillator.start();
+        greenOscillator.start();
+
+        that.tiles.blue
+            .on("mousedown", function () {
+                blueOscillator.connect(context.destination);
+            })
+            .on("mouseup", function () {
+                blueOscillator.disconnect(context.destination);
+            });
+
+
+        that.tiles.green.on("mousedown", function () {
+                greenOscillator.connect(context.destination);
+            })
+            .on("mouseup", function () {
+                greenOscillator.disconnect(context.destination);
+            });
+
         that.strictInput.prop('checked', false);
         that.count.enable();
-        // blinkText(that.count.output, 2);
+
     }
 
     function disableAllControls() {
-        that.tiles.blue.addClass("disabled-element");
-        that.tiles.green.addClass("disabled-element");
-        that.tiles.red.addClass("disabled-element");
-        that.tiles.yellow.addClass("disabled-element");
-        that.start.addClass("disabled-element");
-        that.strict.addClass("disabled-element");
+        that.tiles.blue
+            .add(that.tiles.green)
+            .add(that.tiles.red)
+            .add(that.tiles.yellow)
+            .add(that.start)
+            .add(that.strict)
+            .addClass("disabled-element");
+
         that.strictInput.prop('checked', false);
         that.count.disable();
     }
 
+    // TODO: FIX
+    blueOscillator.start();
+    greenOscillator.start();
     disableAllControls();
 };
 
+/** 
+    Usage: blinkText(that.count.output, 2);
+*/
 function blinkText(el, reps) {
     var text = el.text();
     if (reps > 0) {
