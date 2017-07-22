@@ -4,56 +4,38 @@
     display: flex;
     align-content: center;
     justify-content: center;
-    line-height: 22px;
-    padding: 5px;
 }
 
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
     height: 20px;
     margin: 0 0.3em;
 }
 
-.switch input {
+#on-off {
     display: none;
 }
 
 .slider {
-    position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background-color: #222;
     border-radius: 3px;
+    width: 40px;
+    height: 20px;
 }
 
 .slider:before {
-    position: absolute;
+    display: block;
     content: "";
-    height: 18px;
-    width: 18px;
-    left: 1px;
-    bottom: 1px;
-    border: #333 solid 1px;
+    width: 20px;
+    height: 20px;
+    border: #333 solid 2px;
     background-color: #2196F3;
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 3px;
 }
 
-input:checked + .slider {
-    background-color: #222;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #222;
-}
-
-input:checked + .slider:before {
+#on-off:checked + .slider:before {
     -webkit-transform: translateX(20px);
     -ms-transform: translateX(20px);
     transform: translateX(20px);

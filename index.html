@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="bootstrap-4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="switch.css">
     <link rel="stylesheet" href="strict.css">
@@ -16,50 +17,85 @@
 
 <body>
     <div class="wrapper">
-        <div class="play-tiles-wrapper">
-            <div class="play-tile-row">
-                <div class="play-tile green-tile"></div>
-                <div class="play-tile red-tile"></div>
-            </div>
-            <div class="play-tile-row">
-                <div class="play-tile yellow-tile"></div>
-                <div class="play-tile blue-tile"></div>
-            </div>
-            <div class="controls-wrapper">
+
+        <table id="simon">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="play-tile green-tile"></div>
+                    </td>
+                    <td>
+                        <div class="play-tile red-tile"></div>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td>
+                        <div class="play-tile yellow-tile"></div>
+                    </td>
+                    <td>
+                        <div class="play-tile blue-tile"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="controls">
+            <div class="simon-title-wrapper">
                 <h1 class="simon-title">Simon<sup class="simon-title-sup">®</sup></h1>
-
-                <div class="strict-wrapper">
-                    Strict
-                    <label class="strict">
-                        <input type="checkbox">
-                        <span class="strict-button"></span>
-                        <span class="indicator"></span>
-                    </label>
-                </div>
-
-                <div class="switch-wrapper">
-                    OFF
-                    <label class="switch">
-                        <input id="on-off" type="checkbox">
-                        <span class="slider"></span>
-                    </label>ON
-                </div>
-
-                <div class="start-wrapper">
-                    <div id="start" class="start"></div>
-                    <div>Start</div>
-                </div>
-
-                <div class="output-wrapper">
-                    <div class="output">...</div>
-                </div>
             </div>
+
+            <table id="buttons">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div id="output">- -</div>
+                        </td>
+                        <td>
+                            <div id="start"></div>
+                        </td>
+                        <td>
+
+                            <!-- Important: label must be placed immediately after input, to make "#strict-input:checked + #strict:before" selector work. -->
+                            <input id="strict-input" type="checkbox">
+                            <label id="strict" for="strict-input"></label>
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            COUNT
+                        </td>
+                        <td>
+                            START
+                        </td>
+                        <td>
+                            STRICT
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="switch-wrapper">
+                <div>OFF</div>
+                <label class="switch">
+                        <input id="on-off" type="checkbox">
+                        <div class="slider"></div>
+                    </label>
+                <div>ON</div>
+            </div>
+
+
+
+
         </div>
-        <audio id="sound1" preload="auto">
+    </div>
+    <audio id="sound1" preload="auto">
           <source src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3" type="audio/mp3">
         </audio>
 
-    </div>
 
     <script src="jquery-3.2.1.min.js"></script>
     <script src="jquery-ui.min.js"></script>
