@@ -1,3 +1,11 @@
+var context = new(AudioContext || webkitAudioContex)();
+var oscillator;
+var gain;
+
+var notes = [
+    45, 47, 49, 51
+];
+
 var Controls = function () {
     var values = {
         count: {
@@ -12,6 +20,7 @@ var Controls = function () {
         }
     }
     var that = this;
+    var attack = 1 / 64;
 
     that.tiles = {};
     that.tiles.blue = $("#blue-tile");
@@ -50,19 +59,6 @@ var Controls = function () {
         }
     });
 
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    var context = new AudioContext();
-
-
-    var blueOscillator = context.createOscillator();
-    blueOscillator.type = 'square';
-    blueOscillator.frequency.value = 500;
-
-    var greenOscillator = context.createOscillator();
-    greenOscillator.type = 'square';
-    greenOscillator.frequency.value = 600;
-
-
     function enableAllControls() {
         that.tiles.blue
             .add(that.tiles.green)
@@ -72,23 +68,46 @@ var Controls = function () {
             .add(that.strict)
             .removeClass("disabled-element");
 
-        blueOscillator.start();
-        greenOscillator.start();
+        $(window).on("mouseup", function () {
+            that.tiles.blue.removeClass("light-blue-tile");
+            that.tiles.green.removeClass("light-green-tile");
+            that.tiles.yellow.removeClass("light-yellow-tile");
+            that.tiles.red.removeClass("light-red-tile");
 
+            if (oscillator) {
+                gain.gain.linearRampToValueAtTime(0, context.currentTime + attack);
+                oscillator.stop(context.currentTime + attack);
+                oscillator = null;
+            }
+
+        });
         that.tiles.blue
             .on("mousedown", function () {
-                blueOscillator.connect(context.destination);
-            })
-            .on("mouseup", function () {
-                blueOscillator.disconnect(context.destination);
+                that.tiles.blue.addClass("light-blue-tile");
+
+                startOscillator(notes[0]);
             });
 
 
-        that.tiles.green.on("mousedown", function () {
-                greenOscillator.connect(context.destination);
-            })
-            .on("mouseup", function () {
-                greenOscillator.disconnect(context.destination);
+        that.tiles.green
+            .on("mousedown", function () {
+                that.tiles.green.addClass("light-green-tile");
+
+                startOscillator(notes[1]);
+            });
+
+        that.tiles.yellow
+            .on("mousedown", function () {
+                that.tiles.yellow.addClass("light-yellow-tile");
+
+                startOscillator(notes[2]);
+            });
+
+        that.tiles.red
+            .on("mousedown", function () {
+                that.tiles.red.addClass("light-red-tile");
+
+                startOscillator(notes[3]);
             });
 
         that.strictInput.prop('checked', false);
@@ -109,11 +128,27 @@ var Controls = function () {
         that.count.disable();
     }
 
-    // TODO: FIX
-    blueOscillator.start();
-    greenOscillator.start();
+    function startOscillator(note) {
+        oscillator = context.createOscillator();
+        gain = context.createGain();
+        oscillator.frequency.value = mToF(note);
+        oscillator.type = "sine";
+        oscillator.connect(gain);
+        gain.gain.setValueAtTime(0, context.currentTime);
+        gain.gain.linearRampToValueAtTime(1, context.currentTime + attack);
+        gain.connect(context.destination);
+        oscillator.start(0);
+    }
+
+    function mToF(note) {
+        return Math.pow(2, (note - 69) / 12) * 440.0;
+    }
+
+
     disableAllControls();
 };
+
+
 
 /** 
     Usage: blinkText(that.count.output, 2);

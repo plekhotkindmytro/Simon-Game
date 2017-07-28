@@ -1,4 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Alfa+Slab+One');
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
 html,
 body {
     width: 100%;
@@ -47,19 +56,19 @@ td {
 }
 
 .light-blue-tile {
-    background-color: #7373FF;
+    background-color: #356AA3 !important;
 }
 
 .light-green-tile {
-    background-color: #91BB99;
+    background-color: #5CC78B !important;
 }
 
 .light-red-tile {
-    background-color: #FF7373;
+    background-color: #C1666B !important;
 }
 
 .light-yellow-tile {
-    background-color: #FFFF5C;
+    background-color: #DEC761 !important;
 }
 
 #simon {
