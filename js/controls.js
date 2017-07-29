@@ -6,6 +6,8 @@ var notes = [
     45, 47, 49, 51
 ];
 
+
+
 var Controls = function () {
     var values = {
         count: {
@@ -113,15 +115,14 @@ var Controls = function () {
         that.strictInput.prop('checked', false);
         that.count.enable();
 
+        var game = new Game();
         that.start.on("click", function () {
-            blinkText(that.count.output, 2, game);
+            blinkText(that.count.output, 2, game.playNew);
         });
 
     }
 
-    function game() {
-        alert("done");
-    }
+
 
     function disableAllControls() {
         that.tiles.blue
@@ -150,6 +151,48 @@ var Controls = function () {
 
     function mToF(note) {
         return Math.pow(2, (note - 69) / 12) * 440.0;
+    }
+
+    function Game() {
+        var sequence = [];
+
+        this.playNew = function () {
+            var randomTile = Math.floor(Math.random() * 4);
+            sequence.push(randomTile);
+            var soundLengthMs = 1000;
+            sequence.forEach(function (tile) {
+
+                switch (tile) {
+                    case 0:
+                        that.tiles.blue.trigger("mousedown");
+                        setTimeout(function () {
+                            that.tiles.blue.trigger("mouseup");
+                        }, soundLengthMs);
+                        break;
+                    case 1:
+                        that.tiles.green.trigger("mousedown");
+                        setTimeout(function () {
+                            that.tiles.green.trigger("mouseup");
+                        }, soundLengthMs);
+                        break;
+                    case 2:
+                        that.tiles.red.trigger("mousedown");
+                        setTimeout(function () {
+                            that.tiles.red.trigger("mouseup");
+                        }, soundLengthMs);
+                        break;
+                    case 3:
+                        that.tiles.yellow.trigger("mousedown");
+                        setTimeout(function () {
+                            that.tiles.yellow.trigger("mouseup");
+                        }, soundLengthMs);
+                        break;
+                }
+            });
+
+
+        }
+
     }
 
 
