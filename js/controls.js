@@ -62,11 +62,8 @@ var Controls = function () {
     });
 
     function enableAllControls() {
-        that.tiles.blue
-            .add(that.tiles.green)
-            .add(that.tiles.red)
-            .add(that.tiles.yellow)
-            .add(that.start)
+        enableTiles();
+        that.start
             .add(that.strict)
             .removeClass("disabled-element");
 
@@ -86,7 +83,7 @@ var Controls = function () {
         that.tiles.blue
             .on("mousedown", function () {
                 that.tiles.blue.addClass("light-blue-tile");
-
+                //scheduleNote(notes[0], context.currentTime);
                 startOscillator(notes[0]);
             });
 
@@ -94,21 +91,21 @@ var Controls = function () {
         that.tiles.green
             .on("mousedown", function () {
                 that.tiles.green.addClass("light-green-tile");
-
+                //scheduleNote(notes[1], context.currentTime);
                 startOscillator(notes[1]);
             });
 
         that.tiles.yellow
             .on("mousedown", function () {
                 that.tiles.yellow.addClass("light-yellow-tile");
-
+                //scheduleNote(notes[2], context.currentTime);
                 startOscillator(notes[2]);
             });
 
         that.tiles.red
             .on("mousedown", function () {
                 that.tiles.red.addClass("light-red-tile");
-
+                //scheduleNote(notes[3], context.currentTime);
                 startOscillator(notes[3]);
             });
 
@@ -122,19 +119,35 @@ var Controls = function () {
 
     }
 
-
-
-    function disableAllControls() {
+    function disableTiles() {
         that.tiles.blue
             .add(that.tiles.green)
             .add(that.tiles.red)
             .add(that.tiles.yellow)
-            .add(that.start)
+            .addClass("disabled-element");
+    }
+
+    function enableTiles() {
+        that.tiles.blue
+            .add(that.tiles.green)
+            .add(that.tiles.red)
+            .add(that.tiles.yellow)
+            .removeClass("disabled-element");
+    }
+
+
+
+    function disableAllControls() {
+        disableTiles();
+        that.start
             .add(that.strict)
             .addClass("disabled-element");
 
         that.strictInput.prop('checked', false);
         that.count.disable();
+        if (oscillator) {
+            oscillator.stop(0)
+        }
     }
 
     function startOscillator(note) {
@@ -149,48 +162,90 @@ var Controls = function () {
         oscillator.start(0);
     }
 
+    var noteLength = 1 / 2;
+    var attack = 1 / 64;
+
+    function scheduleNote(note, time) {
+        var oscillator = context.createOscillator();
+        // create an envelope using gain
+        var gain = context.createGain();
+
+        oscillator.frequency.value = mToF(note);
+
+        // connect the oscillator to the gain and the gain to the output
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+
+        // let's make an envelope with almost no attack and a sharp decay...
+        // starting value of 0:
+        gain.gain.setValueAtTime(0, time);
+        // very quick attack to a value of 1:
+        gain.gain.linearRampToValueAtTime(1, time + attack);
+        // immediate decay to a value of 0:
+        gain.gain.linearRampToValueAtTime(0, time + noteLength);
+
+        // schedule the oscillator to start at `time` and end
+        // at `time + noteLength`
+        oscillator.start(time);
+        oscillator.stop(time + noteLength);
+    }
+
     function mToF(note) {
         return Math.pow(2, (note - 69) / 12) * 440.0;
     }
 
     function Game() {
         var sequence = [];
+        var game_ = this;
+        var soundLengthMs = 1000;
+
+        function playNote(index) {
+            var tileNumber = sequence[index];
+            var tileElement;
+            switch (tileNumber) {
+                case 0:
+                    tileElement = that.tiles.blue;
+                    break;
+                case 1:
+                    tileElement = that.tiles.green;
+                    break;
+                case 2:
+                    tileElement = that.tiles.red;
+                    break;
+                case 3:
+                    tileElement = that.tiles.yellow;
+                    break;
+            }
+
+            tileElement.trigger("mousedown");
+            setTimeout(function () {
+                tileElement.trigger("mouseup");
+                index++;
+                if (index < sequence.length) {
+                    playNote(index);
+                }
+            }, soundLengthMs);
+        }
 
         this.playNew = function () {
             var randomTile = Math.floor(Math.random() * 4);
+            disableTiles();
             sequence.push(randomTile);
-            var soundLengthMs = 1000;
-            sequence.forEach(function (tile) {
+            game_.printScore(that.count.output);
 
-                switch (tile) {
-                    case 0:
-                        that.tiles.blue.trigger("mousedown");
-                        setTimeout(function () {
-                            that.tiles.blue.trigger("mouseup");
-                        }, soundLengthMs);
-                        break;
-                    case 1:
-                        that.tiles.green.trigger("mousedown");
-                        setTimeout(function () {
-                            that.tiles.green.trigger("mouseup");
-                        }, soundLengthMs);
-                        break;
-                    case 2:
-                        that.tiles.red.trigger("mousedown");
-                        setTimeout(function () {
-                            that.tiles.red.trigger("mouseup");
-                        }, soundLengthMs);
-                        break;
-                    case 3:
-                        that.tiles.yellow.trigger("mousedown");
-                        setTimeout(function () {
-                            that.tiles.yellow.trigger("mouseup");
-                        }, soundLengthMs);
-                        break;
-                }
-            });
+            playNote(0);
 
 
+
+        };
+
+        /**
+             output - object selected by jQuery
+             e.g. printScore($("#output"));
+        */
+        this.printScore = function (output) {
+            var text = sequence.length < 10 ? "0" + sequence.length : sequence.length;
+            output.text(text);
         }
 
     }
