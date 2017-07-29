@@ -113,6 +113,14 @@ var Controls = function () {
         that.strictInput.prop('checked', false);
         that.count.enable();
 
+        that.start.on("click", function () {
+            blinkText(that.count.output, 2, game);
+        });
+
+    }
+
+    function game() {
+        alert("done");
     }
 
     function disableAllControls() {
@@ -151,18 +159,20 @@ var Controls = function () {
 
 
 /** 
-    Usage: blinkText(that.count.output, 2);
+    Usage: blinkText(that.count.output, 2, function(){});
 */
-function blinkText(el, reps) {
+function blinkText(el, reps, callback) {
     var text = el.text();
     if (reps > 0) {
         el.text("");
         setTimeout(function () {
             el.text(text);
             setTimeout(function () {
-                shake(el, --reps);
+                blinkText(el, --reps, callback);
             }, 300);
         }, 300);
 
+    } else {
+        callback();
     }
 }
