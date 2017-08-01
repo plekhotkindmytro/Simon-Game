@@ -1,6 +1,8 @@
 var context = new(AudioContext || webkitAudioContex)();
 var oscillator;
 var gain;
+var computerTurn = true;
+
 
 var notes = [
     45, 47, 49, 51
@@ -23,6 +25,7 @@ var Controls = function () {
     }
     var that = this;
     var attack = 1 / 64;
+    var game;
 
     that.tiles = {};
     that.tiles.blue = $("#blue-tile");
@@ -54,78 +57,12 @@ var Controls = function () {
     that.btnOnOff.change(function () {
         if (this.checked) {
             // on
-            enableAllControls();
+            enableAll();
         } else {
             // off
-            disableAllControls();
+            disableAll();
         }
     });
-
-    function enableAllControls() {
-        enableTiles();
-        that.start
-            .add(that.strict)
-            .removeClass("disabled-element");
-
-        $(window).on("mouseup", function () {
-            that.tiles.blue.removeClass("light-blue-tile");
-            that.tiles.green.removeClass("light-green-tile");
-            that.tiles.yellow.removeClass("light-yellow-tile");
-            that.tiles.red.removeClass("light-red-tile");
-
-            if (oscillator) {
-                gain.gain.linearRampToValueAtTime(0, context.currentTime + attack);
-                oscillator.stop(context.currentTime + attack);
-                oscillator = null;
-            }
-
-        });
-        that.tiles.blue
-            .on("mousedown", function () {
-                that.tiles.blue.addClass("light-blue-tile");
-                //scheduleNote(notes[0], context.currentTime);
-                startOscillator(notes[0]);
-            });
-
-
-        that.tiles.green
-            .on("mousedown", function () {
-                that.tiles.green.addClass("light-green-tile");
-                //scheduleNote(notes[1], context.currentTime);
-                startOscillator(notes[1]);
-            });
-
-        that.tiles.yellow
-            .on("mousedown", function () {
-                that.tiles.yellow.addClass("light-yellow-tile");
-                //scheduleNote(notes[2], context.currentTime);
-                startOscillator(notes[2]);
-            });
-
-        that.tiles.red
-            .on("mousedown", function () {
-                that.tiles.red.addClass("light-red-tile");
-                //scheduleNote(notes[3], context.currentTime);
-                startOscillator(notes[3]);
-            });
-
-        that.strictInput.prop('checked', false);
-        that.count.enable();
-
-        var game = new Game();
-        that.start.on("click", function () {
-            blinkText(that.count.output, 2, game.playNew);
-        });
-
-    }
-
-    function disableTiles() {
-        that.tiles.blue
-            .add(that.tiles.green)
-            .add(that.tiles.red)
-            .add(that.tiles.yellow)
-            .addClass("disabled-element");
-    }
 
     function enableTiles() {
         that.tiles.blue
@@ -135,18 +72,111 @@ var Controls = function () {
             .removeClass("disabled-element");
     }
 
+    function enableControls() {
+        that.start
+            .add(that.strict)
+            .removeClass("disabled-element");
+        that.strictInput.prop('checked', false);
+        that.count.enable();
+    }
+
+    function enableAll() {
+        enableTiles();
+        enableControls();
+    }
+
+    $(window).on("mouseup", function () {
+        if (computerTurn) {
+            return;
+        }
+
+        deactivateTiles();
+
+        if (oscillator) {
+            gain.gain.linearRampToValueAtTime(0, context.currentTime + attack);
+            oscillator.stop(context.currentTime + attack);
+            oscillator = null;
+        }
+
+    });
+
+    that.tiles.blue
+        .on("mousedown", function () {
+            that.tiles.blue.addClass("light-blue-tile");
+            mousedown(notes[0]);
+        });
+
+    that.tiles.green
+        .on("mousedown", function () {
+            that.tiles.green.addClass("light-green-tile");
+            mousedown(notes[1]);
+        });
+
+    that.tiles.yellow
+        .on("mousedown", function () {
+            that.tiles.yellow.addClass("light-yellow-tile");
+            mousedown(notes[2]);
+        });
+
+    that.tiles.red
+        .on("mousedown", function () {
+            that.tiles.red.addClass("light-red-tile");
+            mousedown(notes[3]);
+        });
 
 
-    function disableAllControls() {
-        disableTiles();
+    that.start.on("click", function () {
+        game = new Game();
+        that.count.output.text(values.count.start);
+        blinkText(that.count.output, 2, game.playNew);
+    });
+
+    function mousedown(note) {
+        if (computerTurn) {
+            scheduleNote(note, context.currentTime);
+        } else {
+            startOscillator(note);
+        }
+    }
+
+    function deactivateTiles() {
+        that.tiles.blue.removeClass("light-blue-tile");
+        that.tiles.green.removeClass("light-green-tile");
+        that.tiles.yellow.removeClass("light-yellow-tile");
+        that.tiles.red.removeClass("light-red-tile");
+
+    }
+
+
+    function disableTiles() {
+        deactivateTiles();
+        that.tiles.blue
+            .add(that.tiles.green)
+            .add(that.tiles.red)
+            .add(that.tiles.yellow)
+            .addClass("disabled-element");
+    }
+
+
+    function disableControls() {
         that.start
             .add(that.strict)
             .addClass("disabled-element");
-
         that.strictInput.prop('checked', false);
         that.count.disable();
+    }
+
+    function disableAll() {
+        disableTiles();
+        disableControls();
+
         if (oscillator) {
-            oscillator.stop(0)
+            oscillator.stop(0);
+            console.log("disabled");
+        }
+
+        if (game) {
+            game = null;
         }
     }
 
@@ -162,32 +192,34 @@ var Controls = function () {
         oscillator.start(0);
     }
 
-    var noteLength = 1 / 2;
+    var noteLength = 1;
     var attack = 1 / 64;
 
     function scheduleNote(note, time) {
-        var oscillator = context.createOscillator();
+        var oscillator_ = context.createOscillator();
         // create an envelope using gain
-        var gain = context.createGain();
+        var gain_ = context.createGain();
 
-        oscillator.frequency.value = mToF(note);
+        oscillator_.frequency.value = mToF(note);
 
         // connect the oscillator to the gain and the gain to the output
-        oscillator.connect(gain);
-        gain.connect(context.destination);
+        oscillator_.connect(gain_);
+        gain_.connect(context.destination);
 
         // let's make an envelope with almost no attack and a sharp decay...
         // starting value of 0:
-        gain.gain.setValueAtTime(0, time);
+        gain_.gain.setValueAtTime(0, time);
         // very quick attack to a value of 1:
-        gain.gain.linearRampToValueAtTime(1, time + attack);
+        gain_.gain.linearRampToValueAtTime(1, time + attack);
         // immediate decay to a value of 0:
-        gain.gain.linearRampToValueAtTime(0, time + noteLength);
+        gain_.gain.linearRampToValueAtTime(0, time + noteLength);
 
         // schedule the oscillator to start at `time` and end
         // at `time + noteLength`
-        oscillator.start(time);
-        oscillator.stop(time + noteLength);
+        oscillator_.start(time);
+        oscillator_.stop(time + noteLength);
+
+        setTimeout(deactivateTiles, 1000 * noteLength);
     }
 
     function mToF(note) {
@@ -251,7 +283,7 @@ var Controls = function () {
     }
 
 
-    disableAllControls();
+    disableAll();
 };
 
 
