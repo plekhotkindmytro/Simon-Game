@@ -9,7 +9,6 @@ var notes = [
 ];
 
 
-
 var Controls = function () {
     var values = {
         count: {
@@ -106,25 +105,25 @@ var Controls = function () {
     that.tiles.blue
         .on("mousedown", function () {
             that.tiles.blue.addClass("light-blue-tile");
-            mousedown(notes[0]);
+            mousedown(0);
         });
 
     that.tiles.green
         .on("mousedown", function () {
             that.tiles.green.addClass("light-green-tile");
-            mousedown(notes[1]);
+            mousedown(1);
         });
 
     that.tiles.yellow
         .on("mousedown", function () {
             that.tiles.yellow.addClass("light-yellow-tile");
-            mousedown(notes[2]);
+            mousedown(2);
         });
 
     that.tiles.red
         .on("mousedown", function () {
             that.tiles.red.addClass("light-red-tile");
-            mousedown(notes[3]);
+            mousedown(3);
         });
 
 
@@ -134,11 +133,13 @@ var Controls = function () {
         blinkText(that.count.output, 2, game.playNew);
     });
 
-    function mousedown(note) {
+    function mousedown(noteIndex) {
         if (computerTurn) {
-            scheduleNote(note, context.currentTime);
+            scheduleNote(notes[noteIndex], context.currentTime);
         } else {
-            startOscillator(note);
+            startOscillator(notes[noteIndex]);
+            game.addPlayerNote(noteIndex);
+            game.checkSequence();
         }
     }
 
@@ -233,6 +234,7 @@ var Controls = function () {
 
     function Game() {
         var sequence = [];
+        var playerSequence = [];
         var game_ = this;
         var soundLengthMs = 1000;
 
@@ -268,16 +270,75 @@ var Controls = function () {
             }, soundLengthMs);
         }
 
+        this.addPlayerNote = function (index) {
+            playerSequence.push(index);
+        }
+
         this.playNew = function () {
             var randomTile = Math.floor(Math.random() * 4);
-            disableTiles();
             sequence.push(randomTile);
+
+            disableTiles();
+            playerSequence = [];
             game_.printScore(that.count.output);
-
             playNote(0);
+        };
 
+        this.playAgain = function () {
+            disableTiles();
+            playerSequence = [];
+            game_.printScore(that.count.output);
+            playNote(0);
+        };
 
+        function rightNotes(compArray, playerArray) {
+            var i;
+            var len = playerArray.length;
 
+            for (i = 0; i < len; i++) {
+                if (compArray[i] !== playerArray[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        this.checkSequence = function () {
+            if (playerSequence.length < sequence.length) {
+                if (rightNotes(sequence, playerSequence)) {
+                    // do nothing
+                } else {
+                    // print error and play again
+                    if (that.strictInput.prop('checked')) {
+                        that.start.trigger("click");
+                    } else {
+                        if (oscillator) {
+                            gain.gain.linearRampToValueAtTime(0, context.currentTime + noteLength + attack);
+                            oscillator.stop(context.currentTime + noteLength + attack);
+                            oscillator = null;
+                        }
+                        that.count.output.text(values.count.error);
+                        blinkText(that.count.output, 2, game_.playAgain);
+                    }
+                }
+
+            } else if (rightNotes(sequence, playerSequence)) {
+                game_.playNew();
+            } else {
+                // print error and play again
+                if (that.strictInput.prop('checked')) {
+                    that.start.trigger("click");
+                } else {
+                    if (oscillator) {
+                        gain.gain.linearRampToValueAtTime(0, context.currentTime + noteLength + attack);
+                        oscillator.stop(context.currentTime + noteLength + attack);
+                        oscillator = null;
+                    }
+                    that.count.output.text(values.count.error);
+                    blinkText(that.count.output, 2, game_.playAgain);
+                }
+            }
         };
 
         /**
@@ -287,7 +348,7 @@ var Controls = function () {
         this.printScore = function (output) {
             var text = sequence.length < 10 ? "0" + sequence.length : sequence.length;
             output.text(text);
-        }
+        };
 
     }
 
