@@ -1,7 +1,7 @@
 var context = new(AudioContext || webkitAudioContex)();
 var oscillator;
 var gain;
-var computerTurn = true;
+var computerTurn;
 
 
 var notes = [
@@ -70,6 +70,8 @@ var Controls = function () {
             .add(that.tiles.red)
             .add(that.tiles.yellow)
             .removeClass("disabled-element");
+
+        computerTurn = false;
     }
 
     function enableControls() {
@@ -78,10 +80,11 @@ var Controls = function () {
             .removeClass("disabled-element");
         that.strictInput.prop('checked', false);
         that.count.enable();
+        computerTurn = true;
     }
 
     function enableAll() {
-        enableTiles();
+        // enableTiles();
         enableControls();
     }
 
@@ -155,6 +158,7 @@ var Controls = function () {
             .add(that.tiles.red)
             .add(that.tiles.yellow)
             .addClass("disabled-element");
+        computerTurn = true;
     }
 
 
@@ -164,6 +168,7 @@ var Controls = function () {
             .addClass("disabled-element");
         that.strictInput.prop('checked', false);
         that.count.disable();
+        computerTurn = true;
     }
 
     function disableAll() {
@@ -231,6 +236,8 @@ var Controls = function () {
         var game_ = this;
         var soundLengthMs = 1000;
 
+        disableTiles();
+
         function playNote(index) {
             var tileNumber = sequence[index];
             var tileElement;
@@ -255,6 +262,8 @@ var Controls = function () {
                 index++;
                 if (index < sequence.length) {
                     playNote(index);
+                } else {
+                    enableTiles();
                 }
             }, soundLengthMs);
         }
