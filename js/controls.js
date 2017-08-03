@@ -373,7 +373,7 @@ var Controls = function () {
                 }
 
             } else if (rightNotes(sequence, playerSequence)) {
-                if (sequence.length === 50) {
+                if (sequence.length === 20) {
                     alert("You won the game!!!");
                     that.start.trigger("click");
                 } else {
