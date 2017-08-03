@@ -3,6 +3,9 @@ var oscillator;
 var gain;
 var computerTurn;
 
+var noteTimeout;
+var blinkTextTimeout;
+var noteDisableTimeout;
 
 var notes = [
     45, 47, 49, 51
@@ -88,6 +91,9 @@ var Controls = function () {
     }
 
     $(window).on("mouseup", function () {
+        if (!game) {
+            return;
+        }
         if (computerTurn) {
             return;
         }
@@ -98,30 +104,43 @@ var Controls = function () {
             gain.gain.linearRampToValueAtTime(0, context.currentTime + attack);
             oscillator.stop(context.currentTime + attack);
             oscillator = null;
+            game.checkSequence();
         }
 
     });
 
     that.tiles.blue
         .on("mousedown", function () {
+            if (!game) {
+                return;
+            }
             that.tiles.blue.addClass("light-blue-tile");
             mousedown(0);
         });
 
-    that.tiles.green
+    that.tiles.yellow
         .on("mousedown", function () {
-            that.tiles.green.addClass("light-green-tile");
+            if (!game) {
+                return;
+            }
+            that.tiles.yellow.addClass("light-yellow-tile");
             mousedown(1);
         });
 
-    that.tiles.yellow
+    that.tiles.green
         .on("mousedown", function () {
-            that.tiles.yellow.addClass("light-yellow-tile");
+            if (!game) {
+                return;
+            }
+            that.tiles.green.addClass("light-green-tile");
             mousedown(2);
         });
 
     that.tiles.red
         .on("mousedown", function () {
+            if (!game) {
+                return;
+            }
             that.tiles.red.addClass("light-red-tile");
             mousedown(3);
         });
@@ -134,12 +153,15 @@ var Controls = function () {
     });
 
     function mousedown(noteIndex) {
+        if (!game) {
+            return;
+        }
+
         if (computerTurn) {
             scheduleNote(notes[noteIndex], context.currentTime);
         } else {
             startOscillator(notes[noteIndex]);
             game.addPlayerNote(noteIndex);
-            game.checkSequence();
         }
     }
 
@@ -180,10 +202,16 @@ var Controls = function () {
             oscillator.stop(0);
             console.log("disabled");
         }
+        console.log(oscillator);
+        console.log(gain);
 
         if (game) {
             game = null;
         }
+
+        clearTimeout(noteTimeout);
+        clearTimeout(noteDisableTimeout);
+        clearTimeout(blinkTextTimeout);
     }
 
     function startOscillator(note) {
@@ -233,14 +261,23 @@ var Controls = function () {
     }
 
     function Game() {
+        var killId = setTimeout(function () {
+            for (var i = killId; i > 0; i--) clearInterval(i)
+        }, 0);
         var sequence = [];
         var playerSequence = [];
         var game_ = this;
         var soundLengthMs = 1000;
+        clearTimeout(blinkTextTimeout);
+        clearTimeout(noteTimeout);
+        clearTimeout(noteDisableTimeout);
 
         disableTiles();
 
         function playNote(index) {
+            if (!game) {
+                return;
+            }
             var tileNumber = sequence[index];
             var tileElement;
             switch (tileNumber) {
@@ -248,26 +285,27 @@ var Controls = function () {
                     tileElement = that.tiles.blue;
                     break;
                 case 1:
-                    tileElement = that.tiles.green;
-                    break;
-                case 2:
-                    tileElement = that.tiles.red;
-                    break;
-                case 3:
                     tileElement = that.tiles.yellow;
                     break;
+                case 2:
+                    tileElement = that.tiles.green;
+                    break;
+                case 3:
+                    tileElement = that.tiles.red;
+                    break;
             }
-
-            tileElement.trigger("mousedown");
-            setTimeout(function () {
-                tileElement.trigger("mouseup");
-                index++;
-                if (index < sequence.length) {
-                    playNote(index);
-                } else {
-                    enableTiles();
-                }
-            }, soundLengthMs);
+            noteTimeout = setTimeout(function () {
+                tileElement.trigger("mousedown");
+                noteDisableTimeout = setTimeout(function () {
+                    tileElement.trigger("mouseup");
+                    index++;
+                    if (index < sequence.length) {
+                        playNote(index);
+                    } else {
+                        enableTiles();
+                    }
+                }, soundLengthMs);
+            }, soundLengthMs / 2);
         }
 
         this.addPlayerNote = function (index) {
@@ -279,16 +317,21 @@ var Controls = function () {
             sequence.push(randomTile);
 
             disableTiles();
-            playerSequence = [];
-            game_.printScore(that.count.output);
-            playNote(0);
+            noteTimeout = setTimeout(function () {
+                playerSequence = [];
+                game_.printScore(that.count.output);
+                playNote(0);
+            }, noteLength * 1000);
+
         };
 
         this.playAgain = function () {
             disableTiles();
-            playerSequence = [];
-            game_.printScore(that.count.output);
-            playNote(0);
+            noteTimeout = setTimeout(function () {
+                playerSequence = [];
+                game_.printScore(that.count.output);
+                playNote(0);
+            }, noteLength * 1000);
         };
 
         function rightNotes(compArray, playerArray) {
@@ -309,10 +352,16 @@ var Controls = function () {
                 if (rightNotes(sequence, playerSequence)) {
                     // do nothing
                 } else {
+                    disableTiles();
                     // print error and play again
                     if (that.strictInput.prop('checked')) {
-                        that.start.trigger("click");
+                        that.count.output.text(values.count.error);
+                        blinkText(that.count.output, 2, function () {
+                            that.start.trigger("click");
+                        });
+
                     } else {
+                        disableTiles();
                         if (oscillator) {
                             gain.gain.linearRampToValueAtTime(0, context.currentTime + noteLength + attack);
                             oscillator.stop(context.currentTime + noteLength + attack);
@@ -324,11 +373,21 @@ var Controls = function () {
                 }
 
             } else if (rightNotes(sequence, playerSequence)) {
-                game_.playNew();
+                if (sequence.length === 50) {
+                    alert("You won the game!!!");
+                    that.start.trigger("click");
+                } else {
+                    disableTiles();
+                    game_.playNew();
+                }
             } else {
+                disableTiles();
                 // print error and play again
                 if (that.strictInput.prop('checked')) {
-                    that.start.trigger("click");
+                    that.count.output.text(values.count.error);
+                    blinkText(that.count.output, 2, function () {
+                        that.start.trigger("click");
+                    });
                 } else {
                     if (oscillator) {
                         gain.gain.linearRampToValueAtTime(0, context.currentTime + noteLength + attack);
@@ -367,7 +426,7 @@ function blinkText(el, reps, callback) {
         el.text("");
         setTimeout(function () {
             el.text(text);
-            setTimeout(function () {
+            blinkTextTimeout = setTimeout(function () {
                 blinkText(el, --reps, callback);
             }, 300);
         }, 300);
